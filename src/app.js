@@ -224,3 +224,22 @@ Router.on('bank', renderBank);
 Router.on('stats', renderStats);
 renderSide();
 next();
+
+/* ================= AI command box ================= */
+Copilot.register({
+  context: () => `Category: ${cat}. Rating ${Math.round(S.overall)} ± ${ratingBand(S)}, ${S.n} answered, streak ${S.streak}. ${cur && Router.current === 'play' ? `Current question (${cur.cat}): ${cur.q} Options: ${cur.options.map((o, i) => `${i + 1}) ${o}`).join(' ')}. Answered: ${!!$('#play')._done?.()}` : ''} Categories: ${CATS.join(', ')}.`,
+  actions: [
+    { name: 'set_category', description: 'Play only one category (or Mixed) and show the next question', params: { category: ['Mixed', ...CATS].join(' | ') },
+      run: ({ category }) => { const c = ['Mixed', ...CATS].find((x) => x.toLowerCase() === String(category).toLowerCase()); if (!c) throw new Error('Categories: Mixed, ' + CATS.join(', ')); cat = c; $$('#cats .btn').forEach((b) => b.classList.toggle('on', b.textContent === c)); Router.go('play'); next(); return `Playing ${c}: ${cur ? cur.q : 'no questions left'}`; } },
+    { name: 'next_question', description: 'Skip to the next question', params: {}, run: () => { Router.go('play'); next(); return cur ? cur.q : 'No questions left'; } },
+    { name: 'answer', description: 'Answer the current question on the Play page with an option number (1-4) or its text', params: { choice: 'option number 1-4 or the option text' },
+      run: ({ choice }) => { const box = $('#play'); if (!cur || box._done()) throw new Error('No open question'); let i = cur.options.findIndex((o) => o.toLowerCase() === String(choice).toLowerCase()); if (i < 0) i = +choice - 1; if (!(i >= 0 && i < 4)) throw new Error('Pick 1-4'); box._answer(i); return i === cur.answer ? 'Correct' : `Wrong, the answer was ${cur.options[cur.answer]}`; } },
+    { name: 'add_question', description: 'Add a multiple-choice question to the bank. Write it yourself: accurate, unambiguous, one correct option and three plausible distractors.', params: { category: CATS.join(' | '), question: 'question text', options: 'array of exactly 4 strings', answer: 'index 0-3 of the correct option', explain: 'one sentence explanation', difficulty: '1-10' },
+      run: ({ category, question, options, answer, explain, difficulty }) => { const r = importQuestions([{ cat: CATS.find((c) => c.toLowerCase() === String(category).toLowerCase()) || category, q: question, options, answer: +answer, explain, difficulty: +difficulty || 5 }], pool); if (!r.questions.length) throw new Error(r.rejected[0].errors.join('; ')); extra.push(r.questions[0]); saveExtra(); if (Router.current === 'bank') renderBank(); return `Added "${question}" to ${category}`; } },
+    { name: 'start_daily', description: 'Open today\'s daily ten', params: {}, run: () => { Router.go('daily'); return 'Opened the daily ten'; } },
+    { name: 'retry_mistakes', description: 'Start a retry round of questions answered wrongly', params: {}, run: () => { Router.go('mistakes'); retryQueue = mistakes(S.answers).map((m) => byId(m.id)).filter(Boolean); const n = retryQueue.length; retryNext(); return n ? `Retrying ${n} questions` : 'No mistakes to retry'; } },
+    { name: 'search_bank', description: 'Search the question bank', params: { text: 'search text', category: 'optional category' }, run: ({ text, category }) => { Router.go('bank'); $('#bSearch').value = text || ''; $('#bCat').value = CATS.find((c) => c.toLowerCase() === String(category || '').toLowerCase()) || ''; renderBank(); return $('#bCount').textContent; } },
+    { name: 'my_stats', query: true, description: 'Look up rating, accuracy and answer counts overall and per category', params: {},
+      run: () => { const a = S.answers.filter((x) => !x.practice); return JSON.stringify({ overall: Math.round(S.overall), band: ratingBand(S), answered: a.length, accuracy: a.length ? Math.round((100 * a.filter((x) => x.ok).length) / a.length) : null, bestStreak: S.best, categories: CATS.map((c) => { const xs = a.filter((x) => x.cat === c); return { c, rating: S.cats[c] ? Math.round(S.cats[c].r) : null, answered: xs.length, accuracy: xs.length ? Math.round((100 * xs.filter((x) => x.ok).length) / xs.length) : null }; }), outstandingMistakes: mistakes(S.answers).length }); } },
+  ],
+});

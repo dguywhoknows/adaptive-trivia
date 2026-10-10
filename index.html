@@ -3,89 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trivia Elo</title>
-<meta name="description" content="Adaptive AI trivia: questions and players both carry Elo ratings, so every question lands at the edge of what you know.">
-<meta name="app-repo" content="https://github.com/dguywhoknows/adaptive-trivia">
-<meta name="app-version" content="2.0.0">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23d97706'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Arial%2CHelvetica%2Csans-serif' font-weight='700' font-size='13' fill='white'%3ETE%3C/text%3E%3C/svg%3E">
+<title>Trivia Elo: Trivia that is always exactly hard enough</title>
+<meta name="description" content="Questions and players both carry chess-style ratings, so every question lands right at the edge of what you know.">
+<meta property="og:title" content="Trivia Elo">
+<meta property="og:description" content="Questions and players both carry chess-style ratings, so every question lands right at the edge of what you know.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23d97706'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='13' fill='white'%3ETE%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/base.css">
-<link rel="stylesheet" href="styles/app.css">
+<link rel="stylesheet" href="styles/landing.css">
+<style>:root { --accent: #d97706; }</style>
 </head>
-<body>
-<header class="topbar">
-  <div class="brand"><span class="logo" aria-hidden="true">TE</span><div><h1>Trivia Elo</h1><p>Questions that adapt to you, like chess matchmaking.</p></div></div>
-  <nav class="topnav" data-nav aria-label="Pages"></nav>
-  <div class="top-actions"><a class="btn ghost sm" href="https://github.com/dguywhoknows/adaptive-trivia" target="_blank" rel="noopener">GitHub</a><span data-ai-badge></span></div>
+<body class="landing">
+<header class="l-nav">
+  <a class="l-brand" href="#top"><span class="logo">TE</span><b>Trivia Elo</b></a>
+  <nav aria-label="Sections"><a href="#demo">Demo</a><a href="#ask">Ask it</a><a href="#features">Features</a><a href="#faq">FAQ</a></nav>
+  <div class="l-nav-cta"><a class="btn primary" href="app.html">Open the app</a></div>
 </header>
-<div class="page active" data-page="play" data-title="Play">
-<main class="layout">
-  <section class="stack">
-    <div class="card"><div class="cats" id="cats"></div></div>
-    <div class="card play" id="play"></div>
+
+<main id="top">
+  <section class="l-hero">
+    <p class="l-kicker">Free · runs in your browser · AI built in</p>
+    <h1>Trivia that is always exactly hard enough.</h1>
+    <p class="l-sub">Questions and players both carry chess-style ratings, so every question lands right at the edge of what you know.</p>
+    <div class="l-actions"><a class="btn primary big" href="app.html">Open the app</a><a class="btn big" href="#demo">See it working</a></div>
   </section>
-  <aside class="stack">
-    <div class="card rating-card"><div class="k muted small">Overall rating</div><div class="rating" id="overall">1200</div><div class="small muted" id="band"></div><div class="small" id="delta"></div><div class="row small muted" id="streak" style="justify-content:center"></div></div>
-    <div class="card"><h2>Rating history</h2><div id="hist"></div></div>
-    <div class="card"><h2>By category</h2><div id="byCat"></div></div>
-  </aside>
-</main>
-</div>
 
-<div class="page" data-page="daily" data-title="Daily">
-<main class="stack" style="max-width:820px">
-  <div class="page-head"><div><h2 id="dailyTitle">Daily ten</h2><p>The same ten questions for everyone today, easiest first. One attempt, no lifelines, 20 seconds each.</p></div><span class="tag" id="dailyStreak"></span></div>
-  <div class="card play" id="dailyCard"></div>
-  <div class="card"><h2>Past days</h2><div id="dailyHist" class="small"></div></div>
-</main>
-</div>
+  <section class="l-demo reveal" id="demo">
+    <div class="l-window"><div class="l-window-bar"><i></i><i></i><i></i><span>Trivia Elo</span></div>
+      <iframe src="app.html?embed=1" title="Trivia Elo live demo" loading="lazy"></iframe></div>
+    <p class="l-caption">This is the real app running below, not a recording. Try it.</p>
+  </section>
 
-<div class="page" data-page="mistakes" data-title="Mistakes">
-<main class="stack" style="max-width:900px">
-  <div class="page-head"><div><h2>Mistakes</h2><p id="mistSummary"></p></div><button class="btn primary" id="mistRetry">Retry them</button></div>
-  <div id="mistList" class="stack"></div>
-</main>
-</div>
+  <section class="l-section reveal" id="ask">
+    <div class="l-head"><p class="l-kicker">Just say what you want</p><h2>Tell it in plain words. It uses its own tools to do it.</h2>
+      <p>Open the AI box in the app, type a request, and the AI drives the app's real features for you: it sets things up, edits, runs and reports back. Standing instructions let you shape every AI feature to how you like to work.</p></div>
+    <div class="l-prompts"><div class="l-prompt"><div class="say">Only history questions for now</div><div class="does">Switches the category and picks the next question.</div></div><div class="l-prompt"><div class="say">How am I doing in science?</div><div class="does">Reads your category rating and accuracy.</div></div><div class="l-prompt"><div class="say">Add a question about the first moon landing</div><div class="does">Writes, validates and adds a question to the bank.</div></div></div>
+  </section>
 
-<div class="page" data-page="bank" data-title="Question bank">
-<main class="stack">
-  <div class="card row"><input class="input grow" id="bSearch" placeholder="Search questions" aria-label="Search"><select id="bCat" style="width:auto" aria-label="Category"><option value="">All categories</option></select><select id="bSrc" style="width:auto" aria-label="Source"><option value="">All sources</option><option value="b">Built-in</option><option value="ai">Generated</option><option value="c">Yours</option></select><span class="small muted" id="bCount"></span></div>
-  <div class="grid side-r">
-    <div class="card table-wrap" style="max-height:640px"><table id="bTable"></table></div>
-    <aside class="stack">
-      <form class="card stack" id="addQ">
-        <h2 style="margin:0">Add a question</h2>
-        <select id="nCat" aria-label="Category"></select>
-        <textarea id="nQ" rows="2" placeholder="Question" aria-label="Question"></textarea>
-        <div class="stack" id="nOpts"></div>
-        <label>Difficulty <input type="range" id="nDiff" min="1" max="10" value="5"></label>
-        <input class="input" id="nExplain" placeholder="Explanation (optional)" aria-label="Explanation">
-        <div class="small" id="nErr" style="color:var(--bad)"></div>
-        <button class="btn primary" type="submit">Add</button>
-      </form>
-      <div class="card stack"><h2 style="margin:0">Import / export</h2><p class="small muted" style="margin:0">JSON: <code>[{"cat","q","options":[4],"answer":0-3,"explain","difficulty":1-10}]</code></p><div class="row"><label class="btn">Import JSON<input type="file" id="bImport" accept=".json,application/json" hidden></label><button class="btn ghost" id="bExport">Export yours</button></div></div>
-    </aside>
-  </div>
-</main>
-</div>
+  <section class="l-section reveal" id="features">
+    <div class="l-head"><p class="l-kicker">What it does</p><h2>Everything in one place</h2></div>
+    <div class="l-grid"><div class="l-card"><h3>Dual Elo</h3><p>Per-player (overall + per-category) and per-question ratings, both updated every answer</p></div><div class="l-card"><h3>Target-difficulty picker that aims</h3><p>Target-difficulty picker that aims for ~60% success with a little randomness</p></div><div class="l-card"><h3>Background AI question generation near</h3><p>Background AI question generation near your rating, de-duplicated against the pool</p></div><div class="l-card"><h3>20-second timer</h3><p>20-second timer, keyboard play (1-4, Enter), streaks</p></div><div class="l-card"><h3>Lifelines</h3><p>50:50 and an AI hint that nudges without revealing (assisted answers earn less rating)</p></div><div class="l-card"><h3>Rating-history sparkline</h3><p>Rating-history sparkline and per-category ratings with accuracy</p></div><div class="l-card"><h3>36-question offline bank</h3><p>36-question offline bank for demo mode</p></div><div class="l-card"><h3>Rating uncertainty</h3><p>A deviation that shrinks with every answer drives the K-factor and is shown as a ± band, so new players calibrate quickly and settled ratings stay stable</p></div><div class="l-card"><h3>Daily page</h3><p>The same ten built-in questions for everyone each day (seeded by the date, at most two per category, easiest first), one attempt, a day streak and a copyable result</p></div></div>
+  </section>
 
-<div class="page" data-page="stats" data-title="Stats">
-<main class="stack">
-  <div class="kpis" id="sKpis"></div>
-  <div class="grid cols-2">
-    <div class="card"><h2>Calibration</h2><p class="small muted">Does the rating predict you well? Each dot compares the predicted chance of a right answer with how often you were actually right.</p><div id="calib"></div></div>
-    <div class="card"><h2>Accuracy by difficulty</h2><div id="byDiff"></div></div>
-  </div>
-  <div class="card"><div class="row between"><h2 style="margin:0">Reset</h2><button class="btn ghost danger" id="reset">Reset rating and history</button></div></div>
-</main>
-</div>
+  <section class="l-section reveal">
+    <div class="l-head"><p class="l-kicker">How it works</p><h2>Real engines where it counts, AI where it helps</h2></div>
+    <div class="l-steps">
+      <div><span>1</span><h3>Open the app</h3><p>No sign-up needed right now. Everything runs in your browser.</p></div>
+      <div><span>2</span><h3>Ask in your own words</h3><p>Type or click. The AI handles difficulty-targeted question generation (JSON) with answer shuffling and validation; non-revealing hint generation.</p></div>
+      <div><span>3</span><h3>Keep what you make</h3><p>Your work is saved in your browser and can be exported any time.</p></div>
+    </div>
+    <p class="l-note">Computed locally, with no AI involved: Elo math, matchmaking, timer, scoring, persistence, charts.</p>
+  </section>
 
-<div class="page" data-page="settings" data-title="Settings"></div>
-<script src="src/lib/dom.js"></script>
-<script src="src/lib/ai.js"></script>
-<script src="src/lib/router.js"></script>
-<script src="src/core.js"></script>
-<script src="src/app.js"></script>
+  <section class="l-section reveal" id="faq">
+    <div class="l-head"><p class="l-kicker">Questions</p><h2>Good to know</h2></div>
+    <div class="l-faq">
+      <details><summary>Is it free?</summary><p>Yes. Every feature is free. </p></details>
+      <details><summary>Where is my data stored?</summary><p>What you create stays in this browser on this device. You can export a backup or delete everything from Settings.</p></details>
+      <details><summary>Do I need an API key?</summary><p>Not to try it: the app runs in demo mode with sample AI output. For live AI, connect a free Groq or OpenRouter key in Settings.</p></details>
+      <details><summary>What can I type into the AI box?</summary><p>Anything you would ask a helpful colleague who knows the app, such as: "Only history questions for now". It plans the steps, runs the app's own functions and tells you what it did. The Instructions tab saves preferences every AI feature follows.</p></details>
+      <details><summary>Can I see the code?</summary><p>Yes. It is open source under the MIT license on <a href="https://github.com/dguywhoknows/adaptive-trivia" rel="noopener">GitHub</a>, with a <a href="tests/">public test suite</a>.</p></details>
+    </div>
+  </section>
+
+  <section class="l-final reveal">
+    <h2>Trivia that is always exactly hard enough.</h2>
+    <a class="btn primary big" href="app.html">Open the app</a>
+  </section>
+</main>
+
+<footer class="l-foot"><span>Trivia Elo</span><span><a href="https://github.com/dguywhoknows/adaptive-trivia" rel="noopener">Source</a> · <a href="tests/">Tests</a> · MIT license</span></footer>
+<script>
+document.querySelectorAll('.reveal').forEach((el) => el.classList.add('pre'));
+const io = new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting) { x.target.classList.remove('pre'); io.unobserve(x.target); } }), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
 </body>
 </html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-gate="app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trivia Elo</title>
+<meta name="description" content="Adaptive AI trivia: questions and players both carry Elo ratings, so every question lands at the edge of what you know.">
+<meta name="app-repo" content="https://github.com/dguywhoknows/adaptive-trivia">
+<meta name="app-version" content="2.0.0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23d97706'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='Arial%2CHelvetica%2Csans-serif' font-weight='700' font-size='13' fill='white'%3ETE%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/app.css">
+<script src="src/lib/config.js"></script>
+<script src="src/lib/auth.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><a class="logo-link" href="index.html" aria-label="Home page"><span class="logo" aria-hidden="true">TE</span></a><div><h1>Trivia Elo</h1><p>Questions that adapt to you, like chess matchmaking.</p></div></div>
+  <nav class="topnav" data-nav aria-label="Pages"></nav>
+  <div class="top-actions"><a class="btn ghost sm" href="https://github.com/dguywhoknows/adaptive-trivia" target="_blank" rel="noopener">GitHub</a><span data-ai-badge></span></div>
+</header>
+<div class="page active" data-page="play" data-title="Play">
+<main class="layout">
+  <section class="stack">
+    <div class="card"><div class="cats" id="cats"></div></div>
+    <div class="card play" id="play"></div>
+  </section>
+  <aside class="stack">
+    <div class="card rating-card"><div class="k muted small">Overall rating</div><div class="rating" id="overall">1200</div><div class="small muted" id="band"></div><div class="small" id="delta"></div><div class="row small muted" id="streak" style="justify-content:center"></div></div>
+    <div class="card"><h2>Rating history</h2><div id="hist"></div></div>
+    <div class="card"><h2>By category</h2><div id="byCat"></div></div>
+  </aside>
+</main>
+</div>
+
+<div class="page" data-page="daily" data-title="Daily">
+<main class="stack" style="max-width:820px">
+  <div class="page-head"><div><h2 id="dailyTitle">Daily ten</h2><p>The same ten questions for everyone today, easiest first. One attempt, no lifelines, 20 seconds each.</p></div><span class="tag" id="dailyStreak"></span></div>
+  <div class="card play" id="dailyCard"></div>
+  <div class="card"><h2>Past days</h2><div id="dailyHist" class="small"></div></div>
+</main>
+</div>
+
+<div class="page" data-page="mistakes" data-title="Mistakes">
+<main class="stack" style="max-width:900px">
+  <div class="page-head"><div><h2>Mistakes</h2><p id="mistSummary"></p></div><button class="btn primary" id="mistRetry">Retry them</button></div>
+  <div id="mistList" class="stack"></div>
+</main>
+</div>
+
+<div class="page" data-page="bank" data-title="Question bank">
+<main class="stack">
+  <div class="card row"><input class="input grow" id="bSearch" placeholder="Search questions" aria-label="Search"><select id="bCat" style="width:auto" aria-label="Category"><option value="">All categories</option></select><select id="bSrc" style="width:auto" aria-label="Source"><option value="">All sources</option><option value="b">Built-in</option><option value="ai">Generated</option><option value="c">Yours</option></select><span class="small muted" id="bCount"></span></div>
+  <div class="grid side-r">
+    <div class="card table-wrap" style="max-height:640px"><table id="bTable"></table></div>
+    <aside class="stack">
+      <form class="card stack" id="addQ">
+        <h2 style="margin:0">Add a question</h2>
+        <select id="nCat" aria-label="Category"></select>
+        <textarea id="nQ" rows="2" placeholder="Question" aria-label="Question"></textarea>
+        <div class="stack" id="nOpts"></div>
+        <label>Difficulty <input type="range" id="nDiff" min="1" max="10" value="5"></label>
+        <input class="input" id="nExplain" placeholder="Explanation (optional)" aria-label="Explanation">
+        <div class="small" id="nErr" style="color:var(--bad)"></div>
+        <button class="btn primary" type="submit">Add</button>
+      </form>
+      <div class="card stack"><h2 style="margin:0">Import / export</h2><p class="small muted" style="margin:0">JSON: <code>[{"cat","q","options":[4],"answer":0-3,"explain","difficulty":1-10}]</code></p><div class="row"><label class="btn">Import JSON<input type="file" id="bImport" accept=".json,application/json" hidden></label><button class="btn ghost" id="bExport">Export yours</button></div></div>
+    </aside>
+  </div>
+</main>
+</div>
+
+<div class="page" data-page="stats" data-title="Stats">
+<main class="stack">
+  <div class="kpis" id="sKpis"></div>
+  <div class="grid cols-2">
+    <div class="card"><h2>Calibration</h2><p class="small muted">Does the rating predict you well? Each dot compares the predicted chance of a right answer with how often you were actually right.</p><div id="calib"></div></div>
+    <div class="card"><h2>Accuracy by difficulty</h2><div id="byDiff"></div></div>
+  </div>
+  <div class="card"><div class="row between"><h2 style="margin:0">Reset</h2><button class="btn ghost danger" id="reset">Reset rating and history</button></div></div>
+</main>
+</div>
+
+<div class="page" data-page="settings" data-title="Settings"></div>
+<script src="src/lib/dom.js"></script>
+<script src="src/lib/ai.js"></script>
+<script src="src/lib/router.js"></script>
+<script src="src/lib/copilot.js"></script>
+<script src="src/core.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
