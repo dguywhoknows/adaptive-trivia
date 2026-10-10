@@ -1,4 +1,4 @@
-:root { --accent: #d97706; }
+:root { --accent: #2f6f9f; }
 .layout { display: grid; margin: 0 auto; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; max-width: 1100px; }
 .cats { display: flex; flex-wrap: wrap; gap: 8px; }
 .cats .btn.on { background: var(--accent); color: #fff; border-color: var(--accent); }

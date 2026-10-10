@@ -1,4 +1,4 @@
-/* core.js — the question bank, Elo ratings with an uncertainty band, adaptive selection, daily sets and calibration stats (pure, unit-tested). */
+/* The question bank, Elo ratings with an uncertainty band, adaptive selection, daily sets and calibration stats (pure, unit-tested). */
 
 var CATS = ['Science', 'History', 'Geography', 'Technology', 'Arts', 'Sports'];
 function dToR(d) { return 700 + Math.max(1, Math.min(10, d)) * 130; }
