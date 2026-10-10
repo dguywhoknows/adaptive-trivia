@@ -1,0 +1,16 @@
+{
+  "name": "adaptive-trivia",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Adaptive AI trivia where questions and players both carry Elo ratings, so every question lands at the edge of what you know.",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "test": "node tests/run-node.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dguywhoknows/adaptive-trivia.git"
+  },
+  "homepage": "https://dguywhoknows.github.io/adaptive-trivia/",
+  "license": "MIT"
+}

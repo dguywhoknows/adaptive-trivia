@@ -1,0 +1,32 @@
+:root { --accent: #d97706; }
+.layout { display: grid; margin: 0 auto; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; max-width: 1100px; }
+.cats { display: flex; flex-wrap: wrap; gap: 8px; }
+.cats .btn.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.play { min-height: 420px; display: flex; flex-direction: column; gap: 14px; }
+.qmeta { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.question { font-size: 22px; font-weight: 700; line-height: 1.35; letter-spacing: -.01em; }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt { text-align: left; padding: 14px 16px; font-size: 16px; font-weight: 600; border-radius: 12px; justify-content: flex-start; }
+.opt kbd { font: 11px var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-right: 6px; }
+.opt.right { background: color-mix(in srgb, var(--good) 20%, var(--panel-2)); border-color: var(--good); }
+.opt.wrong { background: color-mix(in srgb, var(--bad) 20%, var(--panel-2)); border-color: var(--bad); }
+.opt.gone { opacity: .25; pointer-events: none; }
+.timer { height: 6px; border-radius: 99px; background: var(--panel-2); overflow: hidden; }
+.timer span { display: block; height: 100%; background: var(--accent); transition: width .1s linear; }
+.explain { background: var(--panel-2); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+.rating-card { text-align: center; }
+.rating { font-size: 46px; font-weight: 800; letter-spacing: -.03em; }
+.cat-row { display: grid; grid-template-columns: 110px 1fr 46px; gap: 8px; align-items: center; font-size: 13px; margin-bottom: 7px; }
+.diff-dots { letter-spacing: 2px; color: var(--accent); }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .opts { grid-template-columns: 1fr; } }
+.grid.side-r { grid-template-columns: minmax(0, 1fr) 340px; }
+.mist { display: grid; gap: 6px; }
+.mist .ans { font-size: 14px; }
+.mist .ans .yours { color: var(--bad); }
+.mist .ans .right { color: var(--good); font-weight: 600; }
+.daily-dots { display: flex; gap: 4px; }
+.daily-dots span { width: 18px; height: 18px; border-radius: 4px; background: var(--panel-2); border: 1px solid var(--line); }
+.daily-dots span.ok { background: var(--good); border-color: var(--good); }
+.daily-dots span.no { background: var(--bad); border-color: var(--bad); }
+#bTable td { font-size: 13px; vertical-align: top; }
+@media (max-width: 900px) { .grid.side-r { grid-template-columns: 1fr; } }
